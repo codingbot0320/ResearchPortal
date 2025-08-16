@@ -1,0 +1,7 @@
+Chicago Manual of Style Guide
+
+This guide focuses on the notes-and-bibliography system, which is popular in history, arts, and some social sciences.
+
+1.  Footnotes/Endnotes: Use numbered footnotes or endnotes for citations.
+2.  Bibliography: A separate section lists all sources cited, providing a full reference.
+3.  Source Types: Learn to format citations for books, journal articles, and archival materials.

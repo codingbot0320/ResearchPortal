@@ -1,0 +1,21 @@
+TITLE
+Author Name¹*
+Author Name²
+Author Name³
+
+¹Affiliation 1, City, Country
+²Affiliation 2, City, Country
+³Affiliation 3, City, Country
+
+*Correspondence: corresponding.author@email.com
+
+Abstract
+The abstract provides a non-technical summary of your paper, typically under 150 words. It should include a brief introduction, the main result, and the implications of your findings.
+
+Main Text
+The main text is a concise narrative of your research.
+- Introduction
+- Results
+- Discussion
+- Methods
+- References

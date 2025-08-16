@@ -1,0 +1,7 @@
+APA 7th Edition Guide
+
+This guide covers the key principles of APA 7th Edition, focusing on a writer-centric approach.
+
+1.  In-text Citations: Use the author-date system, e.g., (Smith, 2023). For direct quotes, include the page number.
+2.  Reference List: Format the full list of sources in alphabetical order by the author's last name. The list is double-spaced with a hanging indent.
+3.  Common Sources: Examples for citing journal articles, books, websites, and conference papers are provided.

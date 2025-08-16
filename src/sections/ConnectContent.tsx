@@ -6,7 +6,7 @@ interface ConnectContentProps {
     onNavClick: (sectionId: string) => void;
 }
 
-const ConnectContent: React.FC<ConnectContentProps> = ({ isAuthenticated, onOpenAuthModal, onNavClick }) => {
+const ConnectContent: React.FC<ConnectContentProps> = ({ onNavClick }) => {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {

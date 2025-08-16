@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import Modal from '../components/Modal';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-interface User {
-    name: string;
-    role: string;
-    hasPaid?: boolean;
-}
 
 interface AiServicesContentProps {
     isAuthenticated: boolean;

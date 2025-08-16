@@ -1,5 +1,5 @@
 import React from 'react';
-import GroupCard from '../components/GroupCard';
+
 
 interface Group {
     title: string;

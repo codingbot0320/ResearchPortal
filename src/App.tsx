@@ -10,7 +10,6 @@ import AiServicesContent from './sections/AiServicesContent';
 import MaterialContent from './sections/MaterialContent';
 import ConnectContent from './sections/ConnectContent';
 import ChatbotPage from './sections/ChatbotPage';
-import LoadingSpinner from './components/LoadingSpinner';
 
 interface Group {
     title: string;

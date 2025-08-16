@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Modal from '../components/Modal';
+import React from 'react';
 
 interface PublishPaperContentProps {
     isAuthenticated: boolean;
@@ -7,22 +6,15 @@ interface PublishPaperContentProps {
 }
 
 const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticated, onOpenAuthModal }) => {
-    // We only need one state for a single payment flow, so the premium contact modal state is removed.
-    const [isPremiumContactModalOpen, setIsPremiumContactModalOpen] = useState(false);
-
     const handleButtonClick = (action: 'standard' | 'premium') => {
         if (!isAuthenticated) {
             onOpenAuthModal('login');
             return;
         }
 
-        // Both 'standard' and 'premium' now trigger the same payment function.
-        if (action === 'standard' || action === 'premium') {
-            handlePayment(action);
-        }
+        handlePayment(action);
     };
     
-    // The handlePayment function now accepts an 'action' to determine the amount and description.
     const handlePayment = async (action: 'standard' | 'premium') => {
         const amount = action === 'standard' ? 9900 : 29900;
         const description = action === 'standard' ? "Standard Publishing Plan" : "Premium Guidance Plan";
@@ -31,7 +23,7 @@ const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticat
             const response = await fetch('/api/payments/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: amount }),
+                body: JSON.stringify({ amount }),
             });
             const order = await response.json();
 
@@ -40,7 +32,7 @@ const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticat
                 amount: order.amount,
                 currency: order.currency,
                 name: "ResearchConnect",
-                description: description,
+                description,
                 order_id: order.id,
                 handler: function (response: any) {
                     alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
@@ -66,12 +58,6 @@ const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticat
         }
     };
 
-    const handlePremiumContactSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert('Your inquiry has been sent! A representative will contact you shortly.');
-        setIsPremiumContactModalOpen(false);
-    };
-
     return (
         <section id="publish-paper-content" className="md:col-span-1">
             <h1 className="text-3xl font-bold text-white">Publish Paper</h1>
@@ -87,7 +73,12 @@ const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticat
                             <li>Submission formatting assistance</li>
                             <li>Basic journal selection guidance</li>
                         </ul>
-                        <button className="mt-4 bg-yellow-400 text-gray-800 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-yellow-500 transition" onClick={() => handleButtonClick('standard')}>Buy Now</button>
+                        <button
+                            className="mt-4 bg-yellow-400 text-gray-800 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-yellow-500 transition"
+                            onClick={() => handleButtonClick('standard')}
+                        >
+                            Buy Now
+                        </button>
                     </div>
                     <div className="border border-gray-200 rounded-lg p-4 text-center">
                         <h3 className="font-bold text-lg text-gray-800">Premium Guidance</h3>
@@ -98,7 +89,12 @@ const PublishPaperContent: React.FC<PublishPaperContentProps> = ({ isAuthenticat
                             <li>Strategic journal/conference selection</li>
                             <li>Full submission support</li>
                         </ul>
-                        <button className="mt-4 bg-yellow-400 text-gray-800 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-yellow-500 transition" onClick={() => handleButtonClick('premium')}>Buy Now</button>
+                        <button
+                            className="mt-4 bg-yellow-400 text-gray-800 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-yellow-500 transition"
+                            onClick={() => handleButtonClick('premium')}
+                        >
+                            Buy Now
+                        </button>
                     </div>
                 </div>
             </div>

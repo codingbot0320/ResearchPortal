@@ -1,7 +1,0 @@
-MLA 9th Edition Guide
-
-MLA is a style guide used primarily in the humanities. This guide helps you format your work correctly.
-
-1.  Formatting: Your paper should be double-spaced with a 1-inch margin on all sides.
-2.  In-text Citations: Use the author-page number system, e.g., (Smith 123).
-3.  Works Cited Page: This is the list of all sources cited in your paper. It is double-spaced, with a hanging indent, and is arranged alphabetically by the author's last name.

@@ -1,5 +1,0 @@
-Citation Management Tool Guide (Zotero & Mendeley)
-
-1.  Why Use a Tool? Citation managers help you organize sources, create bibliographies automatically, and format citations in various styles.
-2.  Adding Sources: Learn how to import sources from web browsers or manually add them to your library.
-3.  Generating Citations: Discover how to use the built-in plugins to generate in-text citations and reference lists instantly while you write.

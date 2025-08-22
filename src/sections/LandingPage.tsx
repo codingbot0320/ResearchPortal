@@ -10,7 +10,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCtaClick }) => {
         <div id="landing-page" className="text-center">
             <div className="relative w-screen h-[500px] overflow-hidden -mx-6">
                 <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover z-0">
-                    <source src="bg1.mp4" type="video/mp4" />
+                    <source src="/bg3.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
                 <div className="absolute inset-0 bg-gray-900 opacity-60 z-10"></div>

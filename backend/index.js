@@ -247,6 +247,13 @@ app.post('/auth/login', (req, res) => {
         }
     });
 });
+app.get("/", (req, res) => {
+    res.send("✅ Research Portal Backend is running!");
+});
+
+app.listen(PORT, () => {
+    console.log(`Backend server running on http://localhost:${PORT}`);
+});
 
 app.listen(PORT, () => {
     console.log(`Backend server running on http://localhost:${PORT}`);

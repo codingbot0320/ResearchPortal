@@ -29,8 +29,8 @@ const YourGroupsContent: React.FC<YourGroupsContentProps> = ({ groupsData, isAut
                 {myJoinedGroups.length > 0 ? (
                     myJoinedGroups.map(group => (
                         <div key={group.title} className="group-card bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="font-bold text-xl text-white">{group.title}</h3>
-                            <p className="text-sm text-white mt-2">You are a member of this group.</p>
+                            <h3 className="font-bold text-xl text-black">{group.title}</h3>
+                            <p className="text-sm text-black mt-2">You are a member of this group.</p>
                         </div>
                     ))
                 ) : (

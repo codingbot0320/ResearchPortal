@@ -1,0 +1,27 @@
+Title: [Project Title for Funding]
+Principal Investigator: [Your Name]
+Institution: [Your Institution]
+
+1. Abstract
+    - A concise summary of the project, its goals, and its expected impact.
+
+2. Project Goals and Objectives
+    - Goal: A broad statement of the project's aim.
+    - Objectives: Specific, measurable, and time-bound outcomes you hope to achieve.
+
+3. Statement of Need
+    - Describe the problem and explain why this project is a critical and timely solution.
+
+4. Project Description
+    - Methodology: A detailed plan of how the project will be executed.
+    - Work Plan & Timeline: A schedule of activities and milestones.
+
+5. Budget Justification
+    - Itemized Budget: A detailed list of all costs (personnel, equipment, travel, etc.).
+    - Budget Narrative: Explain why each budget item is necessary for the project.
+
+6. Evaluation and Dissemination
+    - How will you measure success? How will you share the results with the academic community and the public?
+
+7. References
+    - List all references.

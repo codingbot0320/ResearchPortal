@@ -1,0 +1,8 @@
+Elsevier Submission Guide
+
+1.  Create an Account: Register on the journal's online portal (e.g., Editorial Manager).
+2.  Start New Submission: Log in and click "Submit a New Manuscript."
+3.  Enter Details: Fill in all the required metadata, including title, abstract, and authors.
+4.  Upload Files: Upload your manuscript, figures, and any supplemental material.
+5.  Suggest Reviewers: Provide a list of potential reviewers as requested by the journal.
+6.  Review and Submit: Review the PDF proof of your submission and click "Approve" to finalize.

@@ -1,19 +1,85 @@
-// db.js
-const mysql = require('mysql2/promise');
+// sb.js
+const express = require('express');
+const bcrypt = require('bcryptjs');  // changed from bcrypt to bcryptjs
+const jwt = require('jsonwebtoken');
+const { query } = require('./db'); // Import your db.js file
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'Sujal0320',
-  database: process.env.DB_NAME || 'research_connect',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+const app = express();
+app.use(express.json());
+
+// Secret key for JWT (store in environment variable in production)
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+
+// ------------------ SIGNUP ------------------
+app.post('/signup', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    // Check if user already exists
+    const existingUser = await query(
+      'SELECT * FROM users WHERE email = ?',
+      [email]
+    );
+
+    if (existingUser.length > 0) {
+      return res.status(400).json({ message: 'User already exists!' });
+    }
+
+    // Hash password with bcryptjs
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert new user
+    await query(
+      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+      [username, email, hashedPassword]
+    );
+
+    res.status(201).json({ message: 'User registered successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error registering user' });
+  }
 });
 
-async function query(sql, params) {
-  const [rows] = await pool.execute(sql, params);
-  return rows;
-}
+// ------------------ LOGIN ------------------
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
 
-module.exports = { query, pool };
+  try {
+    // Find user
+    const user = await query(
+      'SELECT * FROM users WHERE email = ?',
+      [email]
+    );
+
+    if (user.length === 0) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+
+    // Compare password using bcryptjs
+    const validPassword = await bcrypt.compare(password, user[0].password);
+
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user[0].id, email: user[0].email },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ message: 'Login successful!', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error logging in user' });
+  }
+});
+
+// ------------------ SERVER ------------------
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

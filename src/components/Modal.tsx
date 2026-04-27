@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface ModalProps {
     title: string;
@@ -8,16 +8,43 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }) => {
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden';
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
 
     return (
-        <div className="modal fixed inset-0 bg-gray-900 bg-opacity-70 z-50 items-center justify-center p-4 modal-active">
-            <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full relative">
-                <button id="close-modal-btn" className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition" onClick={onClose}>
-                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">{title}</h2>
-                {children}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-semibold">{title}</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-gray-600 transition"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div className="p-6">
+                    {children}
+                </div>
             </div>
         </div>
     );

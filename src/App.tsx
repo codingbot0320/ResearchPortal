@@ -296,10 +296,10 @@ const App: React.FC = () => {
                 onNavClick={handleNavClick} 
             />
 
-            <div className={`flex-grow pt-16 ${isAuthenticated ? 'authenticated-bg' : ''}`}>
-                <div className={`container mx-auto px-6`}>
+            <div className={`flex-grow pt-16 ${isAuthenticated ? 'bg-slate-950' : ''}`}>
+                <div className="container mx-auto px-6 py-6">
                     {isAuthenticated ? (
-                        <div id="authenticated-dashboard" className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
+                        <div id="authenticated-dashboard" className="grid grid-cols-1 gap-6 md:grid-cols-[320px_1fr] lg:grid-cols-[340px_1fr]">
                             <Sidebar activeSection={currentSection} onSidebarClick={handleSidebarClick} currentUser={currentUser} />
                             <div className="md:col-span-1">
                                 {renderContent()}

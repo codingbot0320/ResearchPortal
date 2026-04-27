@@ -16,7 +16,7 @@ interface Group {
 interface DashboardContentProps {
     groupsData: Group[];
     isAuthenticated: boolean;
-    currentUser: { name: string, role: string } | null;
+    currentUser: { name: string, role: string, email: string, id: number } | null;
     onJoinGroup: (groupTitle: string, applicationData: any) => void;
     onCreateGroup: (newGroup: Group) => void;
     onOpenAuthModal: (mode: 'login' | 'signup') => void;
@@ -108,20 +108,26 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ groupsData, isAuthe
 
     return (
         <main id="dashboard-content" className="md:col-span-1">
-            <h1 className="text-2xl font-bold text-white">Create or join a research group</h1>
-            <p className="text-white mt-1">Collaborate with students and researchers all over the world!</p>
-            <div className="mt-6 flex items-center space-x-4">
-                <div className="relative flex-1">
-                    <input type="text" placeholder="Search..." className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>
+            <div className="rounded-[40px] border border-slate-800 bg-slate-900/95 p-8 shadow-2xl">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="max-w-2xl">
+                        <h1 className="text-4xl font-semibold text-white">Create or join a research group</h1>
+                        <p className="mt-2 text-slate-300">Collaborate with students and researchers all over the world!</p>
+                    </div>
+                    <button className="rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition" onClick={() => isAuthenticated ? setIsCreateModalOpen(true) : onOpenAuthModal('login')}>
+                        + Create Group
+                    </button>
+                </div>
+                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="relative flex-1">
+                        <input type="text" placeholder="Search..." className="w-full rounded-full border border-slate-700 bg-slate-950/80 px-14 py-4 text-slate-200 placeholder:text-slate-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                        <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>
+                        </div>
                     </div>
                 </div>
-                <button className="create-group-btn bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition" onClick={() => isAuthenticated ? setIsCreateModalOpen(true) : onOpenAuthModal('login')}>
-                    + Create Group
-                </button>
             </div>
-            <div id="group-cards-container" className="mt-6 space-y-4">
+            <div id="group-cards-container" className="mt-8 space-y-6">
                 {filteredGroups.length > 0 ? (
                     filteredGroups.map(group => (
                         <GroupCard

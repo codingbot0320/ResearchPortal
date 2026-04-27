@@ -14,60 +14,92 @@ interface Group {
 interface GroupCardProps {
     group: Group;
     isAuthenticated: boolean;
-    currentUser: { name: string } | null;
-    onJoinClick: (groupTitle: string) => void;
+    currentUser: { name: string; role: string; email: string; id: number } | null;
+    onJoinClick: (groupTitle: string, applicationData: any) => void;
     onVisitProfileClick: () => void;
     onEditClick: (group: Group) => void;
-    onDeleteClick: (groupTitle: string) => void; // Added this prop
+    onDeleteClick: (groupTitle: string) => void;
 }
 
-const GroupCard: React.FC<GroupCardProps> = ({ group, isAuthenticated, currentUser, onJoinClick, onVisitProfileClick, onEditClick, onDeleteClick }) => {
-    const isMember = isAuthenticated && currentUser && group.members.includes(currentUser.name);
-    const isCreator = isAuthenticated && currentUser?.name === group.creator;
-    const isFull = group.members.length >= group.memberLimit;
-    
-    const joinButton = isFull ? (
-        <span className="text-sm text-red-600 font-semibold">Group is Full</span>
-    ) : isMember ? (
-        <span className="text-sm text-green-600 font-semibold">Joined</span>
-    ) : (
-        <button className="join-group-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:bg-blue-700 transition" onClick={() => onJoinClick(group.title)}>
-            Join Research Group
-        </button>
-    );
+const GroupCard: React.FC<GroupCardProps> = ({
+    group,
+    isAuthenticated,
+    currentUser,
+    onJoinClick,
+    onVisitProfileClick,
+    onEditClick,
+    onDeleteClick,
+}) => {
+    const isCreator = currentUser && group.creator === currentUser.name;
+    const isMember = currentUser && group.members.includes(currentUser.name);
+    const hasApplied = currentUser && group.applicants.includes(currentUser.name);
+
+    const handleJoinClick = () => {
+        if (!isAuthenticated || !currentUser) return;
+        const applicationData = {
+            applicantName: currentUser.name,
+            applicantEmail: currentUser.email || '',
+            message: `I would like to join the group "${group.title}".`,
+        };
+        onJoinClick(group.title, applicationData);
+    };
 
     return (
-        <div className="group-card bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-xs text-gray-400">
-                    <span>Created on: {group.createdDate}</span>
+        <div className="bg-white shadow-2xl rounded-[30px] p-6 border border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Created on {group.createdDate}</p>
+                    <h3 className="mt-3 text-2xl font-semibold text-slate-900">{group.title}</h3>
                 </div>
-                <span className={`text-sm font-semibold ${isFull ? 'text-red-600' : 'text-gray-600'}`}>
-                    {group.members.length} / {group.memberLimit} Members
-                </span>
+                <div className="text-sm text-slate-500 font-medium">{group.members.length} / {group.memberLimit} Members</div>
             </div>
-            <h3 className="font-bold text-xl text-gray-800 mt-2">{group.title}</h3>
-            <div className="flex items-center space-x-3 mt-4">
-                <img src={group.avatar} className="profile-image" alt="Creator avatar" />
-                <span className="text-sm font-medium text-gray-600">{group.creator}</span>
+            <div className="mt-6 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-amber-300 text-slate-900 flex items-center justify-center text-lg font-semibold">
+                    {group.creator.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                    <p className="text-base font-semibold text-slate-900">{group.creator}</p>
+                    <p className="text-sm text-slate-500">{group.description}</p>
+                </div>
             </div>
-            <p className="text-sm text-gray-500 mt-4">{group.description}</p>
-            <div className="flex justify-end space-x-3 mt-6">
-                {isCreator && (
-                    <>
-                        <button className="edit-group-btn bg-yellow-400 text-gray-800 font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:bg-yellow-500 transition" onClick={() => onEditClick(group)}>
-                            Edit Group
+            <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    {hasApplied && <span className="text-amber-600 font-medium">Application Pending</span>}
+                    {isMember && <span className="text-emerald-600 font-medium">Member</span>}
+                </div>
+                <div className="flex flex-wrap gap-3 justify-end">
+                    <button
+                        onClick={onVisitProfileClick}
+                        className="rounded-full border border-slate-300 px-5 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
+                    >
+                        Visit Profile
+                    </button>
+                    {!isMember && !hasApplied && !isCreator && (
+                        <button
+                            onClick={handleJoinClick}
+                            className="rounded-full bg-blue-600 px-5 py-2 text-sm text-white hover:bg-blue-700 transition"
+                        >
+                            Join Research Group
                         </button>
-                        <button className="delete-group-btn bg-red-600 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:bg-red-700 transition" onClick={() => onDeleteClick(group.title)}>
-                            Delete Group
-                        </button>
-                    </>
-                )}
-                <button className="visit-profile-btn bg-white text-gray-700 font-semibold py-2 px-4 rounded-lg border border-gray-300 text-sm hover:bg-gray-100 transition" onClick={() => onVisitProfileClick()}>
-                    Visit Profile
-                </button>
-                {joinButton}
+                    )}
+                </div>
             </div>
+            {isCreator && (
+                <div className="mt-6 flex gap-3 justify-end">
+                    <button
+                        onClick={() => onEditClick(group)}
+                        className="rounded-full bg-amber-500 px-4 py-2 text-sm text-white hover:bg-amber-600 transition"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={() => onDeleteClick(group.title)}
+                        className="rounded-full bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600 transition"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

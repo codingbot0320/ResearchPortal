@@ -1,13 +1,11 @@
 import React from 'react';
 
 const LoadingSpinner: React.FC = () => {
-  return (
-    <div className="text-center">
-      <div className="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-blue-500 rounded-full" role="status" aria-label="loading">
-        <span className="sr-only">Loading...</span>
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex justify-center items-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+    );
 };
 
 export default LoadingSpinner;

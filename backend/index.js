@@ -179,20 +179,78 @@ app.post('/contact', async (req, res) => {
 
 app.post('/ai/summarize', async (req, res) => {
     const { text } = req.body;
-    if (!text) {
+    if (!text || typeof text !== 'string' || !text.trim()) {
         return res.status(400).json({ error: 'Text is required for summarization.' });
     }
+
+    const prompt = `Please summarize the following research report in 3-5 concise sentences. Focus on the main findings, methodology, and conclusions. Keep it factual and avoid filler.
+
+Text:
+${text}`;
+
     try {
-        const prompt = `Summarize the following research text concisely, focusing on key findings and conclusions: ${text}`;
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        const summary = response.text();
-        res.json({ summary });
+        let summary = '';
+
+        if (response && typeof response.text === 'function') {
+            summary = await response.text();
+        } else if (result && typeof result.outputText === 'string') {
+            summary = result.outputText;
+        }
+
+        if (!summary || !summary.trim()) {
+            summary = fallbackSummarize(text);
+        }
+
+        res.json({ summary: summary.trim() });
     } catch (error) {
-        console.error('AI summarization error:', error.message);
-        res.status(500).json({ error: 'Failed to generate summary.' });
+        console.error('AI summarization error:', error.message || error);
+        const summary = fallbackSummarize(text);
+        res.json({ summary, fallback: true });
     }
 });
+
+const fallbackSummarize = (text) => {
+    const sentences = text
+        .split(/(?<=[.!?])\s+/)
+        .map((sentence) => sentence.trim())
+        .filter(Boolean);
+
+    if (sentences.length <= 3) {
+        return sentences.join(' ');
+    }
+
+    const wordCounts = sentences.reduce((counts, sentence) => {
+        sentence
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .split(/\s+/)
+            .filter((word) => word.length > 3)
+            .forEach((word) => {
+                counts[word] = (counts[word] || 0) + 1;
+            });
+        return counts;
+    }, {});
+
+    const sentenceScores = sentences.map((sentence) => {
+        const score = sentence
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .split(/\s+/)
+            .filter((word) => word.length > 3)
+            .reduce((total, word) => total + (wordCounts[word] || 0), 0);
+        return { sentence, score };
+    });
+
+    const topSentences = sentenceScores
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
+        .map((item) => item.sentence);
+
+    const ordered = sentences.filter((sentence) => topSentences.includes(sentence));
+    return ordered.length ? ordered.join(' ') : sentences.slice(0, 3).join(' ');
+};
 
 app.post('/ai/title-generate', async (req, res) => {
     const { keywords, description } = req.body;
